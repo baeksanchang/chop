@@ -11,10 +11,8 @@
 #include "AudioPlayer.h"
 #include <iostream>
 
-AudioPlayer::AudioPlayer(){
-	
-	randParam = false;
-	
+AudioPlayer::AudioPlayer()
+{
 	//initialize to default audio device
 	audioDeviceManager.initialise (1, /* number of input channels */
 								   2, /* number of output channels */
@@ -37,11 +35,8 @@ AudioPlayer::AudioPlayer(){
 	
 	// start the IO device pulling its data from our callback..
 	audioDeviceManager.addAudioCallback (this);
-	
-	startTimer(1, 50);
-	startTimer(2, 50);
-
 }
+
 AudioPlayer::~AudioPlayer()
 {
 	audioDeviceManager.removeAudioCallback (this);
@@ -57,11 +52,8 @@ void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
 						   int numSamples)
 
 {
-
 	// pass the audio callback to our player source
 	audioSourcePlayer.audioDeviceIOCallback (inputChannelData, totalNumInputChannels, outputChannelData, totalNumOutputChannels, numSamples);
-
-
 }
 
 void AudioPlayer::audioDeviceAboutToStart (AudioIODevice* device)
@@ -74,15 +66,15 @@ void AudioPlayer::audioDeviceStopped()
 	audioSourcePlayer.audioDeviceStopped();
 }
 
-void AudioPlayer::playSample(){
-
+void AudioPlayer::playSample()
+{
 	transportSource.setPosition (0.0);
 	transportSource.start();
 	currentAudioFileSource->setLooping(true); // loop it
 }
 
-void AudioPlayer::setFile(File audioFile){
-	
+void AudioPlayer::setFile(File audioFile)
+{
 	transportSource.stop();
 	transportSource.setSource (0);
 	deleteAndZero (currentAudioFileSource);
@@ -106,101 +98,15 @@ void AudioPlayer::setFile(File audioFile){
 	}
 	
 	totalPosLength = transportSource.getTotalLength();
-	
 }
 
-void AudioPlayer::changeSpeed(double ratio){
-
-	masterResamplingSource->setResamplingRatio(ratio);
-	
+void AudioPlayer::changeSpeed(double ratio)
+{
+	masterResamplingSource->setResamplingRatio(ratio);	
 }
 
-void AudioPlayer::changeGain(float gain){
-	
-	masterGain = (double)gain;
-	transportSource.setGain(masterGain);
-	
+void AudioPlayer::changeGain(float gain)
+{	
+	masterGain = (double) gain;
+	transportSource.setGain(masterGain);	
 }
-
-void AudioPlayer::timerCallback(int timerID){
-
-	if (randParam){  // if the toggle button has been selected
-	
-		if (timerID == 1){
-			sineFreq+=sineInc; //increment determined by frequency in setRandTransRate()
-			double sineRate = 0.5*transpRange*(sin(6.28*sineFreq)+1);
-			resamplingAudioSource->setResamplingRatio(1.0+sineRate);
-		
-			if(sineInc >= 1) sineInc = 0;
-		}
-	
-		else if (timerID == 2){
-			randPos = rand()%totalPosLength;
-			transportSource.setNextReadPosition(randPos);
-		}
-	
-	}
-	
-}
-
-void AudioPlayer::setRandParam(bool b){
-
-	randParam = b;
-	
-}
-
-void AudioPlayer::setTranspRate(int hz){
-	
-	int oldMS1 = getTimerInterval(1);
-	int oldMS2 = getTimerInterval(2);
-	
-	
-	
-	if (hz == 0){
-		resamplingAudioSource->setResamplingRatio(1.0);
-		stopTimer(1);
-	}
-	else{
-	
-		stopTimer(1);
-	
-		sineInc = 0.01*hz;
-	
-		startTimer(1, oldMS1);
-		if(isTimerRunning(2)){ //sync the timer starts
-			stopTimer(2);
-			startTimer(2, oldMS2);
-		}
-	}
-	
-}
-
-void AudioPlayer::setSkipRate(int hz){
-	
-	int oldMS1 = getTimerInterval(2);
-	
-	if(hz == 0){
-		stopTimer(2);
-	}
-	else {
-
-		stopTimer(2);
-		
-		int ms = (1/ (double) hz) * 1000.;
-		
-		startTimer(2, ms);
-	
-		if(isTimerRunning(1)){ //sync the timer starts
-			stopTimer(1);
-			startTimer(1, oldMS1);
-		}
-	}
-	
-}
-
-void AudioPlayer::setTranspRange(float max){
-	
-	transpRange = (double)max;
-	
-}
-

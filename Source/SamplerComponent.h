@@ -3,13 +3,13 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  10 Dec 2009 11:24:45 am
+  Creation date:  4 Oct 2011 11:00:03am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Jucer version: 1.11
+  Jucer version: 1.12
 
   ------------------------------------------------------------------------------
 
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_C7F40330__
-#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_C7F40330__
+#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__
+#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -59,6 +59,7 @@ public:
     void sliderValueChanged (Slider* sliderThatWasMoved);
 
 
+
     //==============================================================================
     juce_UseDebuggingNewOperator
 
@@ -76,14 +77,7 @@ private:
     Label* speedLabel;
     Slider* gainSlider;
     Label* sustainLabel;
-    ToggleButton* randToggleButton;
-    Slider* transpRangeSlider;
-    Label* sustainLabel2;
-    Slider* transpRateSlider;
-    Label* sustainLabel3;
-    Slider* skipRateSlider;
-    Label* sustainLabel4;
-    Path internalPath1;
+
 
     //==============================================================================
     // (prevent copy constructor and operator= being generated..)
@@ -92,4 +86,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_C7F40330__
+#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__

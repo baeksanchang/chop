@@ -13,7 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class AudioPlayer  : public AudioIODeviceCallback, public MultiTimer
+class AudioPlayer  : public AudioIODeviceCallback
 {
 public:
     //==============================================================================
@@ -34,23 +34,10 @@ public:
 	
 	void changeSpeed(double ratio);
 	void changeGain(float gain);
-	
-	void timerCallback(int timerID);
-	void setRandParam(bool b);
-	void setTranspRate(int hz);
-	void setSkipRate(int hz);
-	void setTranspRange(float max);
-    
+
 private:
 	
-	bool randParam;
-	int randHz;
-	double transpRange;
 	double masterGain;
-	int randPos;
-	
-	double sineInc;
-	double sineFreq;
 	int totalPosLength;
 	
 	// this wraps the actual audio device
@@ -74,8 +61,6 @@ private:
 	ResamplingAudioSource* masterResamplingSource;
 	
     File currentFile;
-	
-
 };
 
 
