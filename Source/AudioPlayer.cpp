@@ -13,18 +13,20 @@
 
 AudioPlayer::AudioPlayer()
 {
+	int numOutputChannels = 2, numInputChannels = 0;
+
 	//initialize to default audio device
-	audioDeviceManager.initialise (1, /* number of input channels */
-								   2, /* number of output channels */
+	audioDeviceManager.initialise (numInputChannels, /* number of input channels */
+								   numOutputChannels, /* number of output channels */
 								   0, /* no XML settings.. */
 								   true  /* select default device on failure */);
 	
-	currentAudioFileSource = 0;
+	currentAudioFileSource = NULL;
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
 
 	// resampler for our transport source (file input)
-	resamplingAudioSource = new ResamplingAudioSource(&transportSource, true);
+	resamplingAudioSource = new ResamplingAudioSource(&transportSource, true, numOutputChannels);
 
 	// connect resampled source as the input for the audioSourcePlayer
 	audioSourcePlayer.setSource (resamplingAudioSource);
@@ -36,9 +38,15 @@ AudioPlayer::AudioPlayer()
 AudioPlayer::~AudioPlayer()
 {
 	audioDeviceManager.removeAudioCallback (this);
-	transportSource.setSource (0);
-	deleteAndZero (currentAudioFileSource);
-	audioSourcePlayer.setSource (0);
+	
+	if (transportSource.isPlaying())
+		transportSource.stop();
+	transportSource.setSource (NULL);
+	
+	if (currentAudioFileSource)
+		deleteAndZero (currentAudioFileSource);
+
+	audioSourcePlayer.setSource (NULL);
 }
 
 void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
@@ -48,8 +56,23 @@ void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
 						   int numSamples)
 
 {
-	// pass the audio callback to our player source
-	audioSourcePlayer.audioDeviceIOCallback (inputChannelData, totalNumInputChannels, outputChannelData, totalNumOutputChannels, numSamples);
+	// Create a buffer that points to outputChannelData
+	AudioSampleBuffer outputBuffer (outputChannelData, totalNumOutputChannels, numSamples);
+	
+	AudioSourceChannelInfo info;
+	info.buffer = &outputBuffer;
+	info.startSample = 0;
+	info.numSamples = numSamples;
+
+	// Gets the audio buffer from resamplingAudioSource and stores it to outputBuffer
+	// So, outputChannelData now stores the audio from the file transport stream
+	resamplingAudioSource->getNextAudioBlock (info);
+
+	// do audio processing here, for example gain is applied to audio samples
+	for (int i = 0; i < numSamples; i++) {
+		outputChannelData[0][i] *= masterGain;
+		outputChannelData[1][i] *= masterGain;
+	}
 }
 
 void AudioPlayer::audioDeviceAboutToStart (AudioIODevice* device)
@@ -66,14 +89,21 @@ void AudioPlayer::playSample()
 {
 	transportSource.setPosition (0.0);
 	transportSource.start();
-	currentAudioFileSource->setLooping(true); // loop it
+
+	// check if audio file is set, or else it will crash
+	if (currentAudioFileSource)
+		currentAudioFileSource->setLooping(true); // loop it
 }
 
 void AudioPlayer::setFile(File audioFile)
 {
-	transportSource.stop();
-	transportSource.setSource (0);
-	deleteAndZero (currentAudioFileSource);
+	if (transportSource.isPlaying()) {
+		transportSource.stop();
+		transportSource.setSource (NULL);
+	}
+
+	if (currentAudioFileSource)
+		deleteAndZero (currentAudioFileSource);
 	
 	// get a format manager and set it up with the basic types (wav and aiff).
 	AudioFormatManager formatManager;
@@ -81,10 +111,9 @@ void AudioPlayer::setFile(File audioFile)
 	
 	AudioFormatReader* reader = formatManager.createReaderFor (audioFile);
 
-	if (reader != 0)
-	{
+	if (reader != NULL) {
 		currentFile = audioFile;
-		
+
 		currentAudioFileSource = new AudioFormatReaderSource (reader, true);
 		
 		// ..and plug it into our transport source
@@ -92,17 +121,16 @@ void AudioPlayer::setFile(File audioFile)
 								   32768, // tells it to buffer this many samples ahead
 								   reader->sampleRate);
 	}
-	
+
 	totalPosLength = transportSource.getTotalLength();
 }
 
 void AudioPlayer::changeSpeed(double ratio)
 {
-	resamplingAudioSource->setResamplingRatio(ratio);	
+	resamplingAudioSource->setResamplingRatio(ratio);
 }
 
 void AudioPlayer::changeGain(float gain)
 {	
 	masterGain = (double) gain;
-	transportSource.setGain(masterGain);	
 }
