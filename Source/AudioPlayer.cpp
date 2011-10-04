@@ -22,16 +22,12 @@ AudioPlayer::AudioPlayer()
 	currentAudioFileSource = 0;
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
-	
-	resamplingAudioSource = new ResamplingAudioSource(&transportSource, true);   // resampler for our transport source (file input)
-	
-	// add the audio source to our mixer..
-	mixerSource.addInputSource (resamplingAudioSource, false);
-	
-	masterResamplingSource = new ResamplingAudioSource(&mixerSource, true); //now resample the mixer output
-	
-	// ..and connect the mixer to our source player.
-	audioSourcePlayer.setSource (masterResamplingSource);
+
+	// resampler for our transport source (file input)
+	resamplingAudioSource = new ResamplingAudioSource(&transportSource, true);
+
+	// connect resampled source as the input for the audioSourcePlayer
+	audioSourcePlayer.setSource (resamplingAudioSource);
 	
 	// start the IO device pulling its data from our callback..
 	audioDeviceManager.addAudioCallback (this);
@@ -102,7 +98,7 @@ void AudioPlayer::setFile(File audioFile)
 
 void AudioPlayer::changeSpeed(double ratio)
 {
-	masterResamplingSource->setResamplingRatio(ratio);	
+	resamplingAudioSource->setResamplingRatio(ratio);	
 }
 
 void AudioPlayer::changeGain(float gain)

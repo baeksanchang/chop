@@ -49,16 +49,11 @@ private:
     // this controls the playback of a positionable audio stream, handling the
     // starting/stopping and sample-rate conversion
     AudioTransportSource transportSource;
-	
-    // this source is used to mix together the output from our synth source
-    // and wave player source
-    MixerAudioSource mixerSource;
-	
+
     // this is the actual stream that's going to read from the audio file.
     AudioFormatReaderSource* currentAudioFileSource;
 	
 	ResamplingAudioSource* resamplingAudioSource;
-	ResamplingAudioSource* masterResamplingSource;
 	
     File currentFile;
 };
