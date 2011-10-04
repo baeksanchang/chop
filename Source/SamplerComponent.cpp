@@ -181,6 +181,7 @@ SamplerComponent::~SamplerComponent()
     deleteAndZero (sustainLabel4);
 
     //[Destructor]. You can add your own custom destruction code here..
+	deleteAndZero (audioPlayer);
     //[/Destructor]
 }
 

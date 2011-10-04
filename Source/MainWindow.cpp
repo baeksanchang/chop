@@ -19,7 +19,7 @@ MainAppWindow::MainAppWindow()
 {
     SamplerComponent* const contentComponent = new SamplerComponent();
 
-    setContentComponent (contentComponent, true, true);
+    setContentOwned (contentComponent, true);
 
     centreWithSize (getWidth(), getHeight());
 

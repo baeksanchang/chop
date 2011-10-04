@@ -42,13 +42,12 @@ AudioPlayer::AudioPlayer(){
 	startTimer(2, 50);
 
 }
-AudioPlayer::~AudioPlayer(){
-
+AudioPlayer::~AudioPlayer()
+{
 	audioDeviceManager.removeAudioCallback (this);
 	transportSource.setSource (0);
 	deleteAndZero (currentAudioFileSource);
 	audioSourcePlayer.setSource (0);
-	
 }
 
 void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
