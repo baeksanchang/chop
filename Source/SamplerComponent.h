@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  4 Oct 2011 11:00:03am
+  Creation date:  5 Oct 2011 1:03:35pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__
-#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__
+#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__
+#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -77,6 +77,9 @@ private:
     Label* speedLabel;
     Slider* gainSlider;
     Label* sustainLabel;
+    ToggleButton* chopButton;
+    Slider* chopSlider;
+    Label* chopLabel;
 
 
     //==============================================================================
@@ -86,4 +89,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_BB6A8C92__
+#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__

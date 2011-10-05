@@ -35,11 +35,20 @@ public:
 	void changeSpeed(double ratio);
 	void changeGain(float gain);
 
+	void setChopEnable(bool set);
+	void setChopAmount(int length);
+
 private:
 	
 	double masterGain;
 	int totalPosLength;
-	
+
+	int chopAmount;
+	int chopCounter;
+	int chopLeftOver;
+	int chopSeekPosition;
+	bool chopping;
+
 	// this wraps the actual audio device
     AudioDeviceManager audioDeviceManager;
 	

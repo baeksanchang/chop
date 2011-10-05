@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  4 Oct 2011 11:00:03am
+  Creation date:  5 Oct 2011 1:03:35pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -39,7 +39,10 @@ SamplerComponent::SamplerComponent ()
       speedSlider (0),
       speedLabel (0),
       gainSlider (0),
-      sustainLabel (0)
+      sustainLabel (0),
+      chopButton (0),
+      chopSlider (0),
+      chopLabel (0)
 {
     addAndMakeVisible (fileButton = new TextButton (L"new button"));
     fileButton->setButtonText (L"file");
@@ -86,18 +89,40 @@ SamplerComponent::SamplerComponent ()
     sustainLabel->setColour (TextEditor::textColourId, Colours::black);
     sustainLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
+    addAndMakeVisible (chopButton = new ToggleButton (L"new toggle button"));
+    chopButton->setButtonText (L"chop");
+    chopButton->addListener (this);
+
+    addAndMakeVisible (chopSlider = new Slider (L"new slider"));
+    chopSlider->setRange (0, 44100, 1);
+    chopSlider->setSliderStyle (Slider::Rotary);
+    chopSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    chopSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopSlider->addListener (this);
+
+    addAndMakeVisible (chopLabel = new Label (L"new label",
+                                              L"chop length"));
+    chopLabel->setFont (Font (15.0000f, Font::plain));
+    chopLabel->setJustificationType (Justification::centredLeft);
+    chopLabel->setEditable (false, false, false);
+    chopLabel->setColour (Label::textColourId, Colours::white);
+    chopLabel->setColour (TextEditor::textColourId, Colours::black);
+    chopLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (440, 340);
+    setSize (500, 340);
 
 
     //[Constructor] You can add your own custom stuff here..
 
 	audioPlayer = new AudioPlayer();
 
-	gainSlider->setValue(0.8);
+	speedSlider->setValue(-1.2);
+	gainSlider->setValue(1.0);
+	chopSlider->setValue(44100);
 
     //[/Constructor]
 }
@@ -113,6 +138,9 @@ SamplerComponent::~SamplerComponent()
     deleteAndZero (speedLabel);
     deleteAndZero (gainSlider);
     deleteAndZero (sustainLabel);
+    deleteAndZero (chopButton);
+    deleteAndZero (chopSlider);
+    deleteAndZero (chopLabel);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -140,6 +168,9 @@ void SamplerComponent::resized()
     speedLabel->setBounds (200, 64, 48, 24);
     gainSlider->setBounds (16, 80, 72, 72);
     sustainLabel->setBounds (56, 56, 48, 24);
+    chopButton->setBounds (272, 112, 56, 24);
+    chopSlider->setBounds (336, 88, 135, 72);
+    chopLabel->setBounds (408, 64, 80, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -164,6 +195,12 @@ void SamplerComponent::buttonClicked (Button* buttonThatWasClicked)
 			chooseLabel->setText(audioFile.getFullPathName(), true);
 		}
         //[/UserButtonCode_fileButton]
+    }
+    else if (buttonThatWasClicked == chopButton)
+    {
+        //[UserButtonCode_chopButton] -- add your button handler code here..
+		audioPlayer->setChopEnable(buttonThatWasClicked->getToggleState());
+        //[/UserButtonCode_chopButton]
     }
 
     //[UserbuttonClicked_Post]
@@ -202,6 +239,12 @@ void SamplerComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 			audioPlayer->changeGain(gainSlider->getValue());
         //[/UserSliderCode_gainSlider]
     }
+    else if (sliderThatWasMoved == chopSlider)
+    {
+        //[UserSliderCode_chopSlider] -- add your slider handling code here..
+		audioPlayer->setChopAmount(chopSlider->getValue());
+        //[/UserSliderCode_chopSlider]
+    }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
@@ -225,7 +268,7 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="SamplerComponent" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
-                 fixedSize="0" initialWidth="440" initialHeight="340">
+                 fixedSize="0" initialWidth="500" initialHeight="340">
   <BACKGROUND backgroundColour="ffb50000"/>
   <TEXTBUTTON name="new button" id="f900e0eb37fca2ee" memberName="fileButton"
               virtualName="" explicitFocusOrder="0" pos="8 16 56 24" bgColOff="fffdfdfd"
@@ -251,6 +294,18 @@ BEGIN_JUCER_METADATA
   <LABEL name="new label" id="14d18467a6f5f3c3" memberName="sustainLabel"
          virtualName="" explicitFocusOrder="0" pos="56 56 48 24" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="gain" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
+  <TOGGLEBUTTON name="new toggle button" id="1e2a614fe6f24e01" memberName="chopButton"
+                virtualName="" explicitFocusOrder="0" pos="272 112 56 24" buttonText="chop"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <SLIDER name="new slider" id="5b4e236ccea8cf23" memberName="chopSlider"
+          virtualName="" explicitFocusOrder="0" pos="336 88 135 72" rotarysliderfill="7f00ffff"
+          min="0" max="44100" int="1" style="Rotary" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+  <LABEL name="new label" id="6203385805c32086" memberName="chopLabel"
+         virtualName="" explicitFocusOrder="0" pos="408 64 80 24" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="chop length" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>

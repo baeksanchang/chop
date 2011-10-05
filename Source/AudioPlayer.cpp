@@ -11,9 +11,18 @@
 #include "AudioPlayer.h"
 #include <iostream>
 
+#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+
 AudioPlayer::AudioPlayer()
 {
 	int numOutputChannels = 2, numInputChannels = 0;
+
+	chopping = false;
+	chopAmount = 0;
+	chopCounter = 0;
+	chopLeftOver = 0;
+	chopSeekPosition = 0;
 
 	//initialize to default audio device
 	audioDeviceManager.initialise (numInputChannels, /* number of input channels */
@@ -64,6 +73,18 @@ void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
 	info.startSample = 0;
 	info.numSamples = numSamples;
 
+	if (chopping && transportSource.isPlaying()) {
+		if (chopCounter == 0) {
+			transportSource.setNextReadPosition(chopSeekPosition);
+			chopLeftOver = 0;
+		}
+		chopCounter += numSamples;
+
+		int chopLeftOver = chopCounter - chopAmount;
+		if (chopLeftOver >= 0)
+			chopCounter = 0;
+	}
+
 	// Gets the audio buffer from resamplingAudioSource and stores it to outputBuffer
 	// So, outputChannelData now stores the audio from the file transport stream
 	resamplingAudioSource->getNextAudioBlock (info);
@@ -92,7 +113,7 @@ void AudioPlayer::playSample()
 
 	// check if audio file is set, or else it will crash
 	if (currentAudioFileSource)
-		currentAudioFileSource->setLooping(true); // loop it
+		currentAudioFileSource->setLooping(true);
 }
 
 void AudioPlayer::setFile(File audioFile)
@@ -118,8 +139,10 @@ void AudioPlayer::setFile(File audioFile)
 		
 		// ..and plug it into our transport source
 		transportSource.setSource (currentAudioFileSource,
-								   32768, // tells it to buffer this many samples ahead
+								   reader->sampleRate*2, // tells it to buffer this many samples ahead
 								   reader->sampleRate);
+
+		chopAmount = MIN(transportSource.getTotalLength(), chopAmount);
 	}
 
 	totalPosLength = transportSource.getTotalLength();
@@ -133,4 +156,23 @@ void AudioPlayer::changeSpeed(double ratio)
 void AudioPlayer::changeGain(float gain)
 {	
 	masterGain = (double) gain;
+}
+
+void AudioPlayer::setChopEnable(bool set)
+{
+	if (set == false) {
+		chopCounter = 0;
+		chopLeftOver = 0;
+		chopSeekPosition = 0;
+	} else {
+		if (currentAudioFileSource)
+			chopSeekPosition = MAX(0, transportSource.getNextReadPosition() - chopAmount);
+	}
+
+	chopping = set;
+}
+
+void AudioPlayer::setChopAmount(int length)
+{
+	chopAmount = length;
 }
