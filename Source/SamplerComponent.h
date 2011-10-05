@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  5 Oct 2011 1:03:35pm
+  Creation date:  5 Oct 2011 4:17:51pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__
-#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__
+#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__
+#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -89,4 +89,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_2062EE16__
+#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__

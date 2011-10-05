@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  5 Oct 2011 1:03:35pm
+  Creation date:  5 Oct 2011 4:17:51pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -59,7 +59,7 @@ SamplerComponent::SamplerComponent ()
     chooseLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
     addAndMakeVisible (speedSlider = new Slider (L"new slider"));
-    speedSlider->setRange (-10, 10, 0.1);
+    speedSlider->setRange (0.1, 10, 0.01);
     speedSlider->setSliderStyle (Slider::Rotary);
     speedSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     speedSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
@@ -120,7 +120,7 @@ SamplerComponent::SamplerComponent ()
 
 	audioPlayer = new AudioPlayer();
 
-	speedSlider->setValue(-1.2);
+	speedSlider->setValue(0.8);
 	gainSlider->setValue(1.0);
 	chopSlider->setValue(44100);
 
@@ -215,28 +215,15 @@ void SamplerComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     if (sliderThatWasMoved == speedSlider)
     {
         //[UserSliderCode_speedSlider] -- add your slider handling code here..
-		double ratio;
-
-		if (speedSlider->getValue() > -1 && speedSlider->getValue() < 1){
-			ratio = 1.0;
-		}
-		else if (speedSlider->getValue() >= 1){
-			ratio = (double) speedSlider->getValue();
-			std::cout << "ratio: " << ratio << "\n";
-		}
-		else if (speedSlider->getValue() <= -1){
-			ratio =  1/fabs((double)speedSlider->getValue());
-			std::cout << "ratio: " << ratio << "\n";
-		}
+		double ratio = speedSlider->getValue();
 
 		audioPlayer->changeSpeed(ratio);
-
         //[/UserSliderCode_speedSlider]
     }
     else if (sliderThatWasMoved == gainSlider)
     {
         //[UserSliderCode_gainSlider] -- add your slider handling code here..
-			audioPlayer->changeGain(gainSlider->getValue());
+		audioPlayer->changeGain(gainSlider->getValue());
         //[/UserSliderCode_gainSlider]
     }
     else if (sliderThatWasMoved == chopSlider)
@@ -280,7 +267,7 @@ BEGIN_JUCER_METADATA
          fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="new slider" id="6c8e6ad8cc6bc03d" memberName="speedSlider"
           virtualName="" explicitFocusOrder="0" pos="112 88 135 72" rotarysliderfill="7f00ffff"
-          min="-10" max="10" int="0.1" style="Rotary" textBoxPos="TextBoxLeft"
+          min="0.1" max="10" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="3a2e160939b6a78a" memberName="speedLabel"
          virtualName="" explicitFocusOrder="0" pos="200 64 48 24" textCol="ffffffff"
