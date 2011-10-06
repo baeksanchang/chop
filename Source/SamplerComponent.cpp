@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  5 Oct 2011 4:17:51pm
+  Creation date:  6 Oct 2011 12:25:23am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -42,7 +42,11 @@ SamplerComponent::SamplerComponent ()
       sustainLabel (0),
       chopButton (0),
       chopSlider (0),
-      chopLabel (0)
+      chopLabel (0),
+      chopRepeatProbSlider (0),
+      chopRepeatProbLabel (0),
+      chopAdvanceProbSlider (0),
+      chopAdvanceProbLabel (0)
 {
     addAndMakeVisible (fileButton = new TextButton (L"new button"));
     fileButton->setButtonText (L"file");
@@ -92,6 +96,7 @@ SamplerComponent::SamplerComponent ()
     addAndMakeVisible (chopButton = new ToggleButton (L"new toggle button"));
     chopButton->setButtonText (L"chop");
     chopButton->addListener (this);
+    chopButton->setColour (ToggleButton::textColourId, Colours::white);
 
     addAndMakeVisible (chopSlider = new Slider (L"new slider"));
     chopSlider->setRange (0, 44100, 1);
@@ -109,6 +114,38 @@ SamplerComponent::SamplerComponent ()
     chopLabel->setColour (TextEditor::textColourId, Colours::black);
     chopLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
+    addAndMakeVisible (chopRepeatProbSlider = new Slider (L"new slider"));
+    chopRepeatProbSlider->setRange (0, 1, 0.01);
+    chopRepeatProbSlider->setSliderStyle (Slider::Rotary);
+    chopRepeatProbSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    chopRepeatProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopRepeatProbSlider->addListener (this);
+
+    addAndMakeVisible (chopRepeatProbLabel = new Label (L"new label",
+                                                        L"chop repeat probability"));
+    chopRepeatProbLabel->setFont (Font (15.0000f, Font::plain));
+    chopRepeatProbLabel->setJustificationType (Justification::centredLeft);
+    chopRepeatProbLabel->setEditable (false, false, false);
+    chopRepeatProbLabel->setColour (Label::textColourId, Colours::white);
+    chopRepeatProbLabel->setColour (TextEditor::textColourId, Colours::black);
+    chopRepeatProbLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+
+    addAndMakeVisible (chopAdvanceProbSlider = new Slider (L"new slider"));
+    chopAdvanceProbSlider->setRange (0, 1, 0.01);
+    chopAdvanceProbSlider->setSliderStyle (Slider::Rotary);
+    chopAdvanceProbSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
+    chopAdvanceProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopAdvanceProbSlider->addListener (this);
+
+    addAndMakeVisible (chopAdvanceProbLabel = new Label (L"new label",
+                                                         L"chop advance probability"));
+    chopAdvanceProbLabel->setFont (Font (15.0000f, Font::plain));
+    chopAdvanceProbLabel->setJustificationType (Justification::centredLeft);
+    chopAdvanceProbLabel->setEditable (false, false, false);
+    chopAdvanceProbLabel->setColour (Label::textColourId, Colours::white);
+    chopAdvanceProbLabel->setColour (TextEditor::textColourId, Colours::black);
+    chopAdvanceProbLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
+
 
     //[UserPreSize]
     //[/UserPreSize]
@@ -123,6 +160,8 @@ SamplerComponent::SamplerComponent ()
 	speedSlider->setValue(0.8);
 	gainSlider->setValue(1.0);
 	chopSlider->setValue(44100);
+	chopRepeatProbSlider->setValue(0.2);
+	chopAdvanceProbSlider->setValue(0.2);
 
     //[/Constructor]
 }
@@ -141,6 +180,10 @@ SamplerComponent::~SamplerComponent()
     deleteAndZero (chopButton);
     deleteAndZero (chopSlider);
     deleteAndZero (chopLabel);
+    deleteAndZero (chopRepeatProbSlider);
+    deleteAndZero (chopRepeatProbLabel);
+    deleteAndZero (chopAdvanceProbSlider);
+    deleteAndZero (chopAdvanceProbLabel);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -171,6 +214,10 @@ void SamplerComponent::resized()
     chopButton->setBounds (272, 112, 56, 24);
     chopSlider->setBounds (336, 88, 135, 72);
     chopLabel->setBounds (408, 64, 80, 24);
+    chopRepeatProbSlider->setBounds (336, 184, 135, 72);
+    chopRepeatProbLabel->setBounds (336, 160, 160, 32);
+    chopAdvanceProbSlider->setBounds (112, 184, 135, 72);
+    chopAdvanceProbLabel->setBounds (112, 160, 176, 32);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -232,6 +279,18 @@ void SamplerComponent::sliderValueChanged (Slider* sliderThatWasMoved)
 		audioPlayer->setChopAmount(chopSlider->getValue());
         //[/UserSliderCode_chopSlider]
     }
+    else if (sliderThatWasMoved == chopRepeatProbSlider)
+    {
+        //[UserSliderCode_chopRepeatProbSlider] -- add your slider handling code here..
+		audioPlayer->setChopRepeatProbability(chopRepeatProbSlider->getValue());
+        //[/UserSliderCode_chopRepeatProbSlider]
+    }
+    else if (sliderThatWasMoved == chopAdvanceProbSlider)
+    {
+        //[UserSliderCode_chopAdvanceProbSlider] -- add your slider handling code here..
+		audioPlayer->setChopAdvanceProbability(chopAdvanceProbSlider->getValue());
+        //[/UserSliderCode_chopAdvanceProbSlider]
+    }
 
     //[UsersliderValueChanged_Post]
     //[/UsersliderValueChanged_Post]
@@ -284,8 +343,9 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <TOGGLEBUTTON name="new toggle button" id="1e2a614fe6f24e01" memberName="chopButton"
-                virtualName="" explicitFocusOrder="0" pos="272 112 56 24" buttonText="chop"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+                virtualName="" explicitFocusOrder="0" pos="272 112 56 24" txtcol="ffffffff"
+                buttonText="chop" connectedEdges="0" needsCallback="1" radioGroupId="0"
+                state="0"/>
   <SLIDER name="new slider" id="5b4e236ccea8cf23" memberName="chopSlider"
           virtualName="" explicitFocusOrder="0" pos="336 88 135 72" rotarysliderfill="7f00ffff"
           min="0" max="44100" int="1" style="Rotary" textBoxPos="TextBoxLeft"
@@ -295,6 +355,24 @@ BEGIN_JUCER_METADATA
          edTextCol="ff000000" edBkgCol="0" labelText="chop length" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
+  <SLIDER name="new slider" id="82801c1b045e79c8" memberName="chopRepeatProbSlider"
+          virtualName="" explicitFocusOrder="0" pos="336 184 135 72" rotarysliderfill="7f00ffff"
+          min="0" max="1" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+  <LABEL name="new label" id="2918814bf2adccf1" memberName="chopRepeatProbLabel"
+         virtualName="" explicitFocusOrder="0" pos="336 160 160 32" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="chop repeat probability"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
+  <SLIDER name="new slider" id="5ea74985e5676575" memberName="chopAdvanceProbSlider"
+          virtualName="" explicitFocusOrder="0" pos="112 184 135 72" rotarysliderfill="7f00ffff"
+          min="0" max="1" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+  <LABEL name="new label" id="639cdec0f057002d" memberName="chopAdvanceProbLabel"
+         virtualName="" explicitFocusOrder="0" pos="112 160 176 32" textCol="ffffffff"
+         edTextCol="ff000000" edBkgCol="0" labelText="chop advance probability"
+         editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
+         fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

@@ -39,6 +39,8 @@ public:
 	void setChopAmount(int length);
     void performChop(int numSamples);
     bool nextBool(double probability);
+	void setChopRepeatProbability(double prob);
+	void setChopAdvanceProbability(double prob);
 
 private:
 	
@@ -50,6 +52,9 @@ private:
 	int chopLeftOver;
 	int chopSeekPosition;
 	bool chopping;
+
+	double chopRepeatProbability;
+	double chopAdvanceProbability;
 
 	// this wraps the actual audio device
     AudioDeviceManager audioDeviceManager;

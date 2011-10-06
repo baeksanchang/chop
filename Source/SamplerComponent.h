@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  5 Oct 2011 4:17:51pm
+  Creation date:  6 Oct 2011 12:25:23am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__
-#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__
+#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__
+#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -80,6 +80,10 @@ private:
     ToggleButton* chopButton;
     Slider* chopSlider;
     Label* chopLabel;
+    Slider* chopRepeatProbSlider;
+    Label* chopRepeatProbLabel;
+    Slider* chopAdvanceProbSlider;
+    Label* chopAdvanceProbLabel;
 
 
     //==============================================================================
@@ -89,4 +93,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_9575564D__
+#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__

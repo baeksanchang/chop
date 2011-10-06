@@ -23,6 +23,8 @@ AudioPlayer::AudioPlayer()
 	chopCounter = 0;
 	chopLeftOver = 0;
 	chopSeekPosition = 0;
+	chopRepeatProbability = 0;
+	chopAdvanceProbability = 0;
 
 	//initialize to default audio device
 	audioDeviceManager.initialise (numInputChannels, /* number of input channels */
@@ -168,22 +170,24 @@ void AudioPlayer::performChop(int numSamples)
     if (chopCounter == 0) {
         // With some probability, start the chop or let the stream keep playing.
         // Keep count anyway to determime where chop would've ended in any case.
-        if (nextBool(0.6))        
+        if (nextBool(chopRepeatProbability))
             transportSource.setNextReadPosition(chopSeekPosition);
         chopLeftOver = 0;
     }
     
     chopCounter += numSamples;
-    int chopLeftOver = chopCounter - chopAmount;
+    chopLeftOver = chopCounter - chopAmount;
 
     // End of the chop
     if (chopLeftOver >= 0)
     {
         chopCounter = 0;
-        // With some probability, advance the chop point.
-        if (nextBool(0.2))
+        // With some probability, advance the chop point, unless
+		// the probability of setting chop to repeat is 100%, which means
+		// we want the chop to keep on happening
+        if (chopRepeatProbability != 1.0 && nextBool(chopAdvanceProbability))
             chopSeekPosition = MAX(0, transportSource.getNextReadPosition());
-    }
+	}
 }
 
 void AudioPlayer::setChopAmount(int length)
@@ -194,5 +198,15 @@ void AudioPlayer::setChopAmount(int length)
 // TODO: Bad code design to put this function here, move it somewhere else later
 bool AudioPlayer::nextBool(double probability)
 {
-    return rand() <  probability * RAND_MAX;
+    return rand() <= probability * RAND_MAX;
+}
+
+void AudioPlayer::setChopRepeatProbability(double prob)
+{
+	chopRepeatProbability = prob;
+}
+
+void AudioPlayer::setChopAdvanceProbability(double prob)
+{
+	chopAdvanceProbability = prob;
 }
