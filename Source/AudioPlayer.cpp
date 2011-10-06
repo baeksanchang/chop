@@ -73,17 +73,8 @@ void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
 	info.startSample = 0;
 	info.numSamples = numSamples;
 
-	if (chopping && transportSource.isPlaying()) {
-		if (chopCounter == 0) {
-			transportSource.setNextReadPosition(chopSeekPosition);
-			chopLeftOver = 0;
-		}
-		chopCounter += numSamples;
-
-		int chopLeftOver = chopCounter - chopAmount;
-		if (chopLeftOver >= 0)
-			chopCounter = 0;
-	}
+	if (chopping && transportSource.isPlaying())
+		performChop(numSamples);
 
 	// Gets the audio buffer from resamplingAudioSource and stores it to outputBuffer
 	// So, outputChannelData now stores the audio from the file transport stream
@@ -161,18 +152,47 @@ void AudioPlayer::changeGain(float gain)
 void AudioPlayer::setChopEnable(bool set)
 {
 	if (set == false) {
-		chopCounter = 0;
-		chopLeftOver = 0;
-		chopSeekPosition = 0;
+        chopCounter = 0;
+        chopLeftOver = 0;
+        chopSeekPosition = 0;
 	} else {
-		if (currentAudioFileSource)
-			chopSeekPosition = MAX(0, transportSource.getNextReadPosition() - chopAmount);
-	}
-
+        if (currentAudioFileSource)
+            chopSeekPosition = MAX(0, transportSource.getNextReadPosition() - chopAmount);
+    }
 	chopping = set;
+}
+
+void AudioPlayer::performChop(int numSamples)
+{
+    // Start of the chop
+    if (chopCounter == 0) {
+        // With some probability, start the chop or let the stream keep playing.
+        // Keep count anyway to determime where chop would've ended in any case.
+        if (nextBool(0.6))        
+            transportSource.setNextReadPosition(chopSeekPosition);
+        chopLeftOver = 0;
+    }
+    
+    chopCounter += numSamples;
+    int chopLeftOver = chopCounter - chopAmount;
+
+    // End of the chop
+    if (chopLeftOver >= 0)
+    {
+        chopCounter = 0;
+        // With some probability, advance the chop point.
+        if (nextBool(0.2))
+            chopSeekPosition = MAX(0, transportSource.getNextReadPosition());
+    }
 }
 
 void AudioPlayer::setChopAmount(int length)
 {
 	chopAmount = length;
+}
+
+// TODO: Bad code design to put this function here, move it somewhere else later
+bool AudioPlayer::nextBool(double probability)
+{
+    return rand() <  probability * RAND_MAX;
 }

@@ -37,6 +37,8 @@ public:
 
 	void setChopEnable(bool set);
 	void setChopAmount(int length);
+    void performChop(int numSamples);
+    bool nextBool(double probability);
 
 private:
 	
