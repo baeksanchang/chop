@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  6 Oct 2011 12:25:23am
+  Creation date:  7 Oct 2011 4:22:25pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,12 +19,13 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__
-#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__
+#ifndef __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_1DC5000B__
+#define __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_1DC5000B__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "AudioPlayer.h"
+#include "WaveformDisplayComponent.h"
 //[/Headers]
 
 
@@ -84,6 +85,7 @@ private:
     Label* chopRepeatProbLabel;
     Slider* chopAdvanceProbSlider;
     Label* chopAdvanceProbLabel;
+    WaveformDisplayComponent* waveformDisplayComponent;
 
 
     //==============================================================================
@@ -93,4 +95,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_8C76BA01__
+#endif   // __JUCER_HEADER_SAMPLERCOMPONENT_SAMPLERCOMPONENT_1DC5000B__

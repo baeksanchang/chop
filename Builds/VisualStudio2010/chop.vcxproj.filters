@@ -13,6 +13,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\WaveformDisplayComponent.cpp">
+      <Filter>chop\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\SamplerComponent.cpp">
       <Filter>chop\Source</Filter>
     </ClCompile>
@@ -39,6 +42,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\WaveformDisplayComponent.h">
+      <Filter>chop\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\SamplerComponent.h">
       <Filter>chop\Source</Filter>
     </ClInclude>

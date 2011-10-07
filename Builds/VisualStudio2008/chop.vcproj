@@ -129,6 +129,8 @@
   <Files>
     <Filter Name="chop">
       <Filter Name="Source">
+        <File RelativePath="..\..\Source\WaveformDisplayComponent.cpp"/>
+        <File RelativePath="..\..\Source\WaveformDisplayComponent.h"/>
         <File RelativePath="..\..\Source\SamplerComponent.cpp"/>
         <File RelativePath="..\..\Source\SamplerComponent.h"/>
         <File RelativePath="..\..\Source\AudioPlayer.cpp"/>

@@ -83,6 +83,12 @@ LINK32=link.exe
 # Begin Group "Source"
 # PROP Default_Filter "cpp;c;cc;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
+SOURCE="..\..\Source\WaveformDisplayComponent.cpp"
+# End Source File
+# Begin Source File
+SOURCE="..\..\Source\WaveformDisplayComponent.h"
+# End Source File
+# Begin Source File
 SOURCE="..\..\Source\SamplerComponent.cpp"
 # End Source File
 # Begin Source File

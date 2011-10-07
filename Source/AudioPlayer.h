@@ -12,6 +12,7 @@
 #define __FILEPLAYER_H_2C333EB0__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "WaveformDisplayComponent.h"
 
 class AudioPlayer  : public AudioIODeviceCallback
 {
@@ -41,6 +42,8 @@ public:
     bool nextBool(double probability);
 	void setChopRepeatProbability(double prob);
 	void setChopAdvanceProbability(double prob);
+
+	void setWaveformDisplayComponent(WaveformDisplayComponent *wf);
 
 private:
 	
@@ -72,6 +75,8 @@ private:
 	ResamplingAudioSource* resamplingAudioSource;
 	
     File currentFile;
+
+	WaveformDisplayComponent *waveform;
 };
 
 

@@ -87,6 +87,7 @@ void AudioPlayer::audioDeviceIOCallback(const float** inputChannelData,
 		outputChannelData[0][i] *= masterGain;
 		outputChannelData[1][i] *= masterGain;
 	}
+	waveform->drawWaveform((const float **)outputChannelData, totalNumOutputChannels, numSamples);
 }
 
 void AudioPlayer::audioDeviceAboutToStart (AudioIODevice* device)
@@ -166,11 +167,14 @@ void AudioPlayer::setChopEnable(bool set)
 
 void AudioPlayer::performChop(int numSamples)
 {
+	int probRepeat = nextBool(chopRepeatProbability);
+	int probAdvance = nextBool(chopAdvanceProbability);
+
     // Start of the chop
     if (chopCounter == 0) {
         // With some probability, start the chop or let the stream keep playing.
         // Keep count anyway to determime where chop would've ended in any case.
-        if (nextBool(chopRepeatProbability))
+        if (probRepeat)
             transportSource.setNextReadPosition(chopSeekPosition);
         chopLeftOver = 0;
     }
@@ -185,7 +189,7 @@ void AudioPlayer::performChop(int numSamples)
         // With some probability, advance the chop point, unless
 		// the probability of setting chop to repeat is 100%, which means
 		// we want the chop to keep on happening
-        if (chopRepeatProbability != 1.0 && nextBool(chopAdvanceProbability))
+        if (probRepeat != 1.0 && probAdvance)
             chopSeekPosition = MAX(0, transportSource.getNextReadPosition());
 	}
 }
@@ -209,4 +213,9 @@ void AudioPlayer::setChopRepeatProbability(double prob)
 void AudioPlayer::setChopAdvanceProbability(double prob)
 {
 	chopAdvanceProbability = prob;
+}
+
+void AudioPlayer::setWaveformDisplayComponent(WaveformDisplayComponent *wf)
+{
+	waveform = wf;
 }

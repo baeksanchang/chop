@@ -32,6 +32,10 @@
   </CONFIGURATIONS>
   <MAINGROUP id="ZThFPq" name="chop">
     <GROUP id="rsuB09" name="Source">
+      <FILE id="zEZPae" name="WaveformDisplayComponent.cpp" compile="1" resource="0"
+            file="Source/WaveformDisplayComponent.cpp"/>
+      <FILE id="ehcxQB" name="WaveformDisplayComponent.h" compile="0" resource="0"
+            file="Source/WaveformDisplayComponent.h"/>
       <FILE id="uoE6ND" name="SamplerComponent.cpp" compile="1" resource="0"
             file="Source/SamplerComponent.cpp"/>
       <FILE id="IPCBDc" name="SamplerComponent.h" compile="0" resource="0"

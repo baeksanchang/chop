@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  6 Oct 2011 12:25:23am
+  Creation date:  7 Oct 2011 4:22:25pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -46,7 +46,8 @@ SamplerComponent::SamplerComponent ()
       chopRepeatProbSlider (0),
       chopRepeatProbLabel (0),
       chopAdvanceProbSlider (0),
-      chopAdvanceProbLabel (0)
+      chopAdvanceProbLabel (0),
+      waveformDisplayComponent (0)
 {
     addAndMakeVisible (fileButton = new TextButton (L"new button"));
     fileButton->setButtonText (L"file");
@@ -66,7 +67,7 @@ SamplerComponent::SamplerComponent ()
     speedSlider->setRange (0.1, 10, 0.01);
     speedSlider->setSliderStyle (Slider::Rotary);
     speedSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    speedSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    speedSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7fffffff));
     speedSlider->addListener (this);
 
     addAndMakeVisible (speedLabel = new Label (L"new label",
@@ -102,7 +103,7 @@ SamplerComponent::SamplerComponent ()
     chopSlider->setRange (0, 44100, 1);
     chopSlider->setSliderStyle (Slider::Rotary);
     chopSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    chopSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7fffffff));
     chopSlider->addListener (this);
 
     addAndMakeVisible (chopLabel = new Label (L"new label",
@@ -118,7 +119,8 @@ SamplerComponent::SamplerComponent ()
     chopRepeatProbSlider->setRange (0, 1, 0.01);
     chopRepeatProbSlider->setSliderStyle (Slider::Rotary);
     chopRepeatProbSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    chopRepeatProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopRepeatProbSlider->setColour (Slider::thumbColourId, Colours::white);
+    chopRepeatProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7fffffff));
     chopRepeatProbSlider->addListener (this);
 
     addAndMakeVisible (chopRepeatProbLabel = new Label (L"new label",
@@ -134,7 +136,7 @@ SamplerComponent::SamplerComponent ()
     chopAdvanceProbSlider->setRange (0, 1, 0.01);
     chopAdvanceProbSlider->setSliderStyle (Slider::Rotary);
     chopAdvanceProbSlider->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    chopAdvanceProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7f00ffff));
+    chopAdvanceProbSlider->setColour (Slider::rotarySliderFillColourId, Colour (0x7fffffff));
     chopAdvanceProbSlider->addListener (this);
 
     addAndMakeVisible (chopAdvanceProbLabel = new Label (L"new label",
@@ -146,11 +148,14 @@ SamplerComponent::SamplerComponent ()
     chopAdvanceProbLabel->setColour (TextEditor::textColourId, Colours::black);
     chopAdvanceProbLabel->setColour (TextEditor::backgroundColourId, Colour (0x0));
 
+    addAndMakeVisible (waveformDisplayComponent = new WaveformDisplayComponent());
+    waveformDisplayComponent->setName (L"new component");
+
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (500, 340);
+    setSize (500, 500);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -163,6 +168,7 @@ SamplerComponent::SamplerComponent ()
 	chopRepeatProbSlider->setValue(0.2);
 	chopAdvanceProbSlider->setValue(0.2);
 
+	audioPlayer->setWaveformDisplayComponent(waveformDisplayComponent);
     //[/Constructor]
 }
 
@@ -184,6 +190,7 @@ SamplerComponent::~SamplerComponent()
     deleteAndZero (chopRepeatProbLabel);
     deleteAndZero (chopAdvanceProbSlider);
     deleteAndZero (chopAdvanceProbLabel);
+    deleteAndZero (waveformDisplayComponent);
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -197,7 +204,7 @@ void SamplerComponent::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colour (0xffb50000));
+    g.fillAll (Colour (0xff590065));
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -218,6 +225,7 @@ void SamplerComponent::resized()
     chopRepeatProbLabel->setBounds (336, 160, 160, 32);
     chopAdvanceProbSlider->setBounds (112, 184, 135, 72);
     chopAdvanceProbLabel->setBounds (112, 160, 176, 32);
+    waveformDisplayComponent->setBounds (16, 272, 464, 184);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -314,8 +322,8 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="SamplerComponent" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
-                 fixedSize="0" initialWidth="500" initialHeight="340">
-  <BACKGROUND backgroundColour="ffb50000"/>
+                 fixedSize="0" initialWidth="500" initialHeight="500">
+  <BACKGROUND backgroundColour="ff590065"/>
   <TEXTBUTTON name="new button" id="f900e0eb37fca2ee" memberName="fileButton"
               virtualName="" explicitFocusOrder="0" pos="8 16 56 24" bgColOff="fffdfdfd"
               buttonText="file" connectedEdges="0" needsCallback="1" radioGroupId="0"/>
@@ -325,7 +333,7 @@ BEGIN_JUCER_METADATA
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
          fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="new slider" id="6c8e6ad8cc6bc03d" memberName="speedSlider"
-          virtualName="" explicitFocusOrder="0" pos="112 88 135 72" rotarysliderfill="7f00ffff"
+          virtualName="" explicitFocusOrder="0" pos="112 88 135 72" rotarysliderfill="7fffffff"
           min="0.1" max="10" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="3a2e160939b6a78a" memberName="speedLabel"
@@ -347,7 +355,7 @@ BEGIN_JUCER_METADATA
                 buttonText="chop" connectedEdges="0" needsCallback="1" radioGroupId="0"
                 state="0"/>
   <SLIDER name="new slider" id="5b4e236ccea8cf23" memberName="chopSlider"
-          virtualName="" explicitFocusOrder="0" pos="336 88 135 72" rotarysliderfill="7f00ffff"
+          virtualName="" explicitFocusOrder="0" pos="336 88 135 72" rotarysliderfill="7fffffff"
           min="0" max="44100" int="1" style="Rotary" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="6203385805c32086" memberName="chopLabel"
@@ -356,16 +364,17 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="new slider" id="82801c1b045e79c8" memberName="chopRepeatProbSlider"
-          virtualName="" explicitFocusOrder="0" pos="336 184 135 72" rotarysliderfill="7f00ffff"
-          min="0" max="1" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          virtualName="" explicitFocusOrder="0" pos="336 184 135 72" thumbcol="ffffffff"
+          rotarysliderfill="7fffffff" min="0" max="1" int="0.01" style="Rotary"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="2918814bf2adccf1" memberName="chopRepeatProbLabel"
          virtualName="" explicitFocusOrder="0" pos="336 160 160 32" textCol="ffffffff"
          edTextCol="ff000000" edBkgCol="0" labelText="chop repeat probability"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
          fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="new slider" id="5ea74985e5676575" memberName="chopAdvanceProbSlider"
-          virtualName="" explicitFocusOrder="0" pos="112 184 135 72" rotarysliderfill="7f00ffff"
+          virtualName="" explicitFocusOrder="0" pos="112 184 135 72" rotarysliderfill="7fffffff"
           min="0" max="1" int="0.01" style="Rotary" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="new label" id="639cdec0f057002d" memberName="chopAdvanceProbLabel"
@@ -373,6 +382,9 @@ BEGIN_JUCER_METADATA
          edTextCol="ff000000" edBkgCol="0" labelText="chop advance probability"
          editableSingleClick="0" editableDoubleClick="0" focusDiscardsChanges="0"
          fontname="Default font" fontsize="15" bold="0" italic="0" justification="33"/>
+  <GENERICCOMPONENT name="new component" id="13217c2a0549b206" memberName="waveformDisplayComponent"
+                    virtualName="" explicitFocusOrder="0" pos="16 272 464 184" class="WaveformDisplayComponent"
+                    params=""/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

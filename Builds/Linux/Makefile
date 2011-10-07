@@ -43,6 +43,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/WaveformDisplayComponent_912afa41.o \
   $(OBJDIR)/SamplerComponent_91d4b9de.o \
   $(OBJDIR)/AudioPlayer_39c70138.o \
   $(OBJDIR)/MainWindow_499ac812.o \
@@ -66,6 +67,11 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/WaveformDisplayComponent_912afa41.o: ../../Source/WaveformDisplayComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling WaveformDisplayComponent.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/SamplerComponent_91d4b9de.o: ../../Source/SamplerComponent.cpp
 	-@mkdir -p $(OBJDIR)
